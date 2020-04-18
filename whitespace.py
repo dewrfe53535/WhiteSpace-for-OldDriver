@@ -7,12 +7,15 @@ import os
 Formore = 0
 
 def writeFile(message, path):
-    file = open(path, 'w')
+    file = open(path, 'w',encoding='utf-8')
     file.write(message)
     file.close()
 
-def readFile(path):
-    file = open(path).read()
+def readFile(path,isdecrypt = False):
+    if isdecrypt:
+        file = open(path,'r',encoding='utf-8').read()
+    else:
+        file = open(path,'rb').read()
     return file
 
 def readWS(white):
@@ -105,7 +108,8 @@ if __name__ == '__main__':
     if encrypt:
         if not inputPath:
             print('Please enter some secret code:')
-            text = raw_input()
+            text = input()
+            text = text.encode('utf-8')
         else:
             text = readFile(inputPath)
         try:
@@ -113,7 +117,7 @@ if __name__ == '__main__':
                 encryptedText = writeWSAdvance(toBin(text))
             else:
                 encryptedText = writeWS(toBin(text))
-        except Exception, e:
+        except Exception as e:
             print(e)
             print('Encrypt success...fully failed due to some reasons.')
             print('Try to check your input!')
@@ -134,15 +138,15 @@ if __name__ == '__main__':
                 print('Please enter some text here:')
             else:
                 print('Please enter some *blanks* here:')
-            white = raw_input()
+            white = input()
         else:
-            white = readFile(inputPath)
+            white = readFile(inputPath,True)
         try:
             if Formore:
                 text = toStr(readWSAdvance(white))
             else:
                 text = toStr(readWS(white))
-        except Exception, e:
+        except Exception as e:
             print(e)
             print('Decrypt success...fully failed due to some reasons.')
             print('Try to check your input!')
